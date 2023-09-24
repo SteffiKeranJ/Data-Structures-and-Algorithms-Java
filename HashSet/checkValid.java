@@ -26,10 +26,28 @@ Constraints:
     n == matrix.length == matrix[i].length
     1 <= n <= 100
     1 <= matrix[i][j] <= n
-
-
-
 **/
+
+// Variation 1
+class Solution {
+    public boolean checkValid(int[][] matrix) {
+        Set<Integer> rowSet = new HashSet<>();
+        Set<Integer> colSet = new HashSet<>();
+        for (int r = 0, n = matrix.length; r < n; ++r) {
+            rowSet.clear();
+            colSet.clear();
+            for (int c = 0; c < n; ++c) {
+                if (!rowSet.add(matrix[r][c]) || !colSet.add(matrix[c][r])) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+}
+
+
+// Variation 2
 class Solution {
     public boolean checkValid(int[][] matrix) {
         HashSet<Integer> uniqueSet = new HashSet<>();
