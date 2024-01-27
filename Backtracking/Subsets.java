@@ -16,6 +16,7 @@ Input: nums = [0]
 Output: [[],[0]]
 
 **/
+// Solution 1
 
 class Solution {
     static int l;
@@ -37,3 +38,36 @@ class Solution {
         
     }
 }
+
+// Solution 2
+
+class Solution {
+    static int l;
+    public List<List<Integer>> subsets(int[] nums) {
+        l = nums.length;
+        List<List<Integer>> result = new ArrayList<>();
+        List<Integer> temp = new ArrayList<>();
+        backtrack(nums, result, temp, 0);
+        return result;
+    }
+
+    private void backtrack(int[] nums, List<List<Integer>> result, List<Integer> temp, int idx) {
+        if(idx >= l) {
+            result.add(new ArrayList<>(temp));
+            return;
+        }
+
+        // not choose
+        backtrack(nums, result, temp, idx+1);
+
+        // choose
+        temp.add(nums[idx]);
+        backtrack(nums, result, temp, idx+1);
+
+        // backtrack
+        temp.remove(temp.size() - 1);        
+    }
+}
+
+
+
