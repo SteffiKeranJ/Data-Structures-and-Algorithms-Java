@@ -39,50 +39,45 @@ To achieve the cost of 0 in the first query, we need to move on the following ed
 **/
 
 class Solution {
-    int par[];
-    int rank[];
+    int parent[];
     int weight[];
     public int[] minimumCost(int n, int[][] edges, int[][] query) {
-        par = new int[n];
-        rank = new int[n];
+        parent = new int[n];
         weight = new int[n];
-        for(int i = 0; i < n; ++i) par[i] = i;
         Arrays.fill(weight, 131071);
+        for(int i = 0; i < n; ++i) parent[i] = i;
         for(int i = 0; i < edges.length; ++i) {
             int u = edges[i][0];
             int v = edges[i][1];
-            int wt = edges[i][2];
-            union(u, v, wt);
+            int w = edges[i][2];
+
+            union(u, v, w);
         }
-        int q = query.length;
-        int ans[] = new int[q];
-        for(int i = 0; i < q; ++i) {
+        int ql = query.length;
+        int ans[] = new int[ql];
+        for(int i = 0; i < ql; ++i) {
             int a = query[i][0];
             int b = query[i][1];
             if(a == b) ans[i] = 0;
-            else if (find(a)!=find(b)) ans[i] = -1;
-            else ans[i] = weight[find(a)];
+            else if(find(a) != find(b)) ans[i] = -1;
+            else ans[i] = weight[parent[a]];
         }
         return ans;
     }
 
-    private void union(int a, int b, int wt) {
-        a  = find(a);
-        b = find(b);
-        if(rank[a] > rank[b]) {
-            par[b] = a;
-            rank[a]++;
-        } else {
-            par[a] = b;
-            rank[a]++;
-        }
-        int x = weight[a] & weight[b] & wt;
+    private void union(int u, int v, int w) {
+        int a = find(u);
+        int b = find(v);
+
+        parent[a] = b;
+        parent[b] = b;
+        int x = weight[a] & weight[b] & w;
         weight[a] = x;
         weight[b] = x;
     }
 
-    private int find(int node) {
-        if(par[node] == node) return node;
-        else return par[node] = find(par[node]); 
+    private int find(int u) {
+        if(parent[u] == u) return u;
+        return parent[u] = find(parent[u]);
     }
 }
