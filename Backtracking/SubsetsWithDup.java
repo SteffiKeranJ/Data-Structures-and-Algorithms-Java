@@ -17,25 +17,22 @@ Output: [[],[0]]
 **/
 
 class Solution {
-    static int l;
+    List<List<Integer>> result = new ArrayList<>();
+
     public List<List<Integer>> subsetsWithDup(int[] nums) {
-        l = nums.length;
         Arrays.sort(nums);
-        List<List<Integer>> result = new ArrayList<>();
-        HashSet<List<Integer>> hSet = new HashSet<>();
-        backTrackHelper(hSet, new ArrayList<>(), nums, 0);
-        result.addAll(hSet);
+        HashSet<List<Integer>> path = new HashSet<>();
+        backtrack(0, nums, path, new ArrayList<Integer>());
+        result.addAll(path);
         return result;
     }
 
-    private static void backTrackHelper(HashSet<List<Integer>> hSet, List<Integer> temp, int[] nums, int idx) {
-        if(idx >= l)  {
-            hSet.add(new ArrayList<>(temp));
-            return;
+    private void backtrack(int index, int[] nums, HashSet<List<Integer>> path, List<Integer> temp) {
+        path.add(new ArrayList<>(temp));
+        for(int i = index; i < nums.length; ++i) {
+            temp.add(nums[i]);
+            backtrack(i+1, nums, path, temp);
+            temp.remove(temp.size() - 1);
         }
-        temp.add(nums[idx]);
-        backTrackHelper(hSet, temp, nums, idx+1);
-        temp.remove(temp.size() -1);
-        backTrackHelper(hSet, temp, nums, idx+1);
     }
 }
